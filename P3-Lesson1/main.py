@@ -22,15 +22,15 @@ form = """
     <br>
 
     <label> Year
-        <input type="text" name="Year">
+        <input type="text" name="Year" value="%(year)s">
     </label>
 
     <label> Month
-        <input type="text" name="Month">
+        <input type="text" name="Month" value="%(month)s">
     </label>
 
     <label> Date
-        <input type="text" name="Date">
+        <input type="text" name="Date" value="%(date)s">
     </label>
 
     <br>
@@ -46,8 +46,9 @@ form = """
 
 
 class MainHandler(webapp2.RequestHandler):
-    def write_form(self, error=""):
-        self.response.out.write(form % {'error': error})
+    def write_form(self, error="", year="", month="", date=""):
+        self.response.out.write(form % {'error': error, 'year': year,
+                                        'month': month, 'date': date})
 
     def get(self):
         self.write_form()
@@ -60,13 +61,25 @@ class MainHandler(webapp2.RequestHandler):
 
         if not (user_year and user_month and user_date):
             error = "Your %s field is not valid."
+            wrong_field = ""
+
             if not user_year:
-                error %= 'Year'
-            elif not user_month:
-                error %= 'Month'
-            else:
-                error %= 'Date'
-            self.write_form(error)
+                wrong_field += 'Year'
+                user_year = ""
+
+            if not user_month:
+                if wrong_field:
+                    wrong_field += ', '
+                wrong_field += 'Month'
+                user_month = ""
+
+            if not user_date:
+                if wrong_field:
+                    wrong_field += ', '
+                wrong_field += 'Date'
+                user_date = ""
+            error %= wrong_field
+            self.write_form(error, user_year, user_month, user_date)
         else:
             self.response.out.write("Thanks! It's a valid date.")
 
