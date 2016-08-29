@@ -16,9 +16,41 @@
 #
 import webapp2
 
+form = """
+<form method="post">
+    What is your birthday?
+    <br>
+
+    <label> Year
+        <input type="text" name="Year">
+    </label>
+
+    <label> Month
+        <input type="text" name="Month">
+    </label>
+
+    <label> Date
+        <input type="text" name="Date">
+    </label>
+
+    <br>
+    <br>
+    <input type="submit">
+</form>
+"""
+
+
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.write('Hello Udacity!')
+        self.response.out.write(form)
+
+    def post(self):
+        import DateHelper
+        user_year = DateHelper.valid_year(self.request.get('Year'))
+        user_month = DateHelper.valid_month(self.request.get('Month'))
+        user_month = DateHelper.valid_month(self.request.get('Month'))
+        self.response.out.write("Thanks! It's a valid date.")
+
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler)
