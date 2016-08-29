@@ -34,6 +34,11 @@ form = """
     </label>
 
     <br>
+    <div style="color:red">
+        %(error)s
+    </div>
+
+    <br>
     <br>
     <input type="submit">
 </form>
@@ -41,8 +46,11 @@ form = """
 
 
 class MainHandler(webapp2.RequestHandler):
+    def write_form(self, error=""):
+        self.response.out.write(form % {'error': error})
+
     def get(self):
-        self.response.out.write(form)
+        self.write_form()
 
     def post(self):
         import DateHelper
@@ -51,13 +59,14 @@ class MainHandler(webapp2.RequestHandler):
         user_date = DateHelper.valid_date(self.request.get('Date'))
 
         if not (user_year and user_month and user_date):
+            error = "Your %s field is not valid."
             if not user_year:
-                print "Bad year ", user_year
-            if not user_month:
-                print "Bad month ", user_month
-            if not user_date:
-                print "Bad date: ", user_date
-            self.response.out.write(form)
+                error %= 'Year'
+            elif not user_month:
+                error %= 'Month'
+            else:
+                error %= 'Date'
+            self.write_form(error)
         else:
             self.response.out.write("Thanks! It's a valid date.")
 
