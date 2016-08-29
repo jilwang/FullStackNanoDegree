@@ -4,5 +4,5 @@ This contains my source code on the first project - a movie trailer navigation p
 
 ## Usage
 1. Clone this repo to your local machine
-2. Run 'python entertainment_center.py', and the navigation page will open up in a new tab in your browser
+2. Run 'python entertainment_center.py' in your terminal (or any IDE you are used to), and the navigation page will open up in a new tab in your browser
 3. Enjoy!
