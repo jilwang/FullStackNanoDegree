@@ -48,8 +48,18 @@ class MainHandler(webapp2.RequestHandler):
         import DateHelper
         user_year = DateHelper.valid_year(self.request.get('Year'))
         user_month = DateHelper.valid_month(self.request.get('Month'))
-        user_month = DateHelper.valid_month(self.request.get('Month'))
-        self.response.out.write("Thanks! It's a valid date.")
+        user_date = DateHelper.valid_date(self.request.get('Date'))
+
+        if not (user_year and user_month and user_date):
+            if not user_year:
+                print "Bad year ", user_year
+            if not user_month:
+                print "Bad month ", user_month
+            if not user_date:
+                print "Bad date: ", user_date
+            self.response.out.write(form)
+        else:
+            self.response.out.write("Thanks! It's a valid date.")
 
 
 app = webapp2.WSGIApplication([
